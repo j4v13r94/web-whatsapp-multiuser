@@ -18,41 +18,32 @@ const qrmax = process.env.QRMAX || 3;
 const ModUsuer = (user, info) =>
   usuarios.splice(usuarios.indexOf(user), 1, Object.assign(user, info));
 
-const CrearUsuario = (id = undefined) => {
-
-  if (id) {
-    if(id.length <= process.env.CLAVE)
-      return;
-    let crear = false;
-    let filtrar = usuarios.length > 0 ? true : false;
-    if (filtrar) {
-      let user = usuarios.find((data) => data.id == id);
-      if (user === undefined) {
-        crear = true;
-      } else {
-        return true;
-      }
-    } else {
-      crear = true;
-    }
-
-    try {
-      if (crear) {
-        let cliente = new Client({
-          authStrategy: new LocalAuth({ clientId: id }),
-        });
-        usuarios.push(Objeto(id, cliente));
-        return true;
-      }
-    } catch (error) {
-      return { msg: `${error}`, off: true };
-    }
-  } else
-    return {
-      msg: `Codigo de usuario debe contener mas de ${process.env.CLAVE} caracteres`,
-      off: true,
-    };
-};
+  const CrearUsuario = (id = undefined) => {
+    let ide = id.trim()
+     if(ide.length >= process.env.CLAVE)
+     {
+       let user = usuarios.find((data) => data.id == id);
+       if(user == undefined)
+       {
+         try {
+           let cliente = new Client({
+             authStrategy: new LocalAuth({ clientId: id }),
+           });
+           usuarios.push(Objeto(id, cliente));
+           return true;
+         } catch (error) {
+           return {msg: `error -> ${error}`,
+           off: true,}
+         }
+   
+       }
+       return true;
+     }
+     return {
+       msg: `Codigo de usuario debe contener mas de ${process.env.CLAVE} caracteres`,
+       off: true,
+     }
+   };
 
 const DestroyCliente = (id) => {
   let user = usuarios.findIndex((data) => data.id == id);
