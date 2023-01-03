@@ -1,4 +1,3 @@
-const e = require("express");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 require("dotenv").config();
 const usuarios = [];
@@ -26,9 +25,7 @@ const ModUsuer = (user, info) =>
        if(user == undefined)
        {
          try {
-           let cliente = new Client({
-             authStrategy: new LocalAuth({ clientId: id }),
-           });
+           let cliente = new Client({ authStrategy: new LocalAuth({ clientId: id }), });
            usuarios.push(Objeto(id, cliente));
            return true;
          } catch (error) {
@@ -65,6 +62,8 @@ const UserConnect = (id) => {
   let user = usuarios.find((data) => data.id == id);
 
   if (user == undefined) return Promise.resolve(user_info);
+
+
   else if (user != undefined && user.estado == false && user.qr == false) {
     user.client.on("qr", (qr) => {
       console.log("ejecutando qr");
